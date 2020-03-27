@@ -1,32 +1,21 @@
 
 const path = require('path')
-
 const fs = require('fs')
-
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
 const webpackMerge = require('webpack-merge')
-
 const webpack = require('webpack');
-
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const baseConfig = require('./webpack.config.base')
-
-const {pageDir,mainHtml,entry,srcRoot,proObj} = require('./config')
-
-
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const chalk = require('chalk');
+const { pageDir, mainHtml, entry, srcRoot, proObj } = require('./config')
 
 function getHtmlArray(entryMap) {
     let htmls = []
-
     Object.keys(entryMap).forEach(function (key) {
         const fullPathName = path.resolve(pageDir, key)
-
         const fileName = path.resolve(fullPathName, mainHtml)
-
         if (fs.existsSync(fileName)) {
             htmls.push(new HtmlWebpackPlugin({
                 filename: key + '.html',
@@ -37,12 +26,12 @@ function getHtmlArray(entryMap) {
     })
     return htmls
 }
-
-
 const htmlArray = getHtmlArray(entry)
 
-
 const proConfig = {
+    performance: {
+        hints: false
+    },
     mode: 'production',
     module: {
         rules: [
@@ -85,17 +74,21 @@ const proConfig = {
     },
     plugins: [
         ...htmlArray,
-        new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[contenthash].css',
             chunkFilename: 'css/[name].[contenthash].chunk.css'
         }),
         new webpack.DefinePlugin({
-            'process.env':{
-                mode:JSON.stringify('production'),
+            'process.env': {
+                mode: JSON.stringify('production'),
                 ...proObj
             }
-        })
+        }),
+        new ProgressBarPlugin({
+            format: `build [${chalk.red.bold(':bar')}] ${chalk.green.bold(':percent')} (:elapsed seconds)`,
+            clear: false
+        }),
+        new CleanWebpackPlugin(),
     ],
     optimization: {
         // 使package.json中sideEffects的文件不会被Tree Shaking掉
@@ -103,7 +96,7 @@ const proConfig = {
         // 抽离第三方代码库
         splitChunks: {
             // 同步代码和异步代码都进行代码分割
-            chunks: 'all',
+            chunks: 'async',
             // 第三方库大于30kb才会被抽离出来
             minSize: 30000,
             // 组和文件名连接符

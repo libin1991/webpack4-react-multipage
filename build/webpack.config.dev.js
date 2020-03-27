@@ -1,18 +1,11 @@
 
 const path = require('path')
-
 const fs = require('fs')
-
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
 const webpack = require('webpack');
-
 const webpackMerge = require('webpack-merge')
-
 const baseConfig = require('./webpack.config.base')
-
-const {pageDir,mainHtml,entry,outputPath,srcRoot,devObj} = require('./config')
-
+const { pageDir, mainHtml, entry, outputPath, srcRoot, devObj } = require('./config')
 
 function getHtmlArray(entryMap) {
     let htmls = []
@@ -35,7 +28,6 @@ function getHtmlArray(entryMap) {
 }
 
 const htmlArray = getHtmlArray(entry)
-
 
 const devConfig = {
     mode: 'development',
@@ -85,8 +77,8 @@ const devConfig = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env':{
-                mode:JSON.stringify('development'),
+            'process.env': {
+                mode: JSON.stringify('development'),
                 ...devObj
             }
         }),
@@ -95,4 +87,4 @@ const devConfig = {
     ].concat(htmlArray)
 }
 
-module.exports = webpackMerge(baseConfig,devConfig)
+module.exports = webpackMerge(baseConfig, devConfig)

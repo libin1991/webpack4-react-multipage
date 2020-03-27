@@ -1,9 +1,6 @@
-
 const path = require('path')
-
 const CopyPlugin = require('copy-webpack-plugin')
-
-const {srcRoot,outputPath,entry} = require('./config')
+const { srcRoot, outputPath, entry } = require('./config')
 
 const baseConfig = {
     entry,
@@ -14,7 +11,7 @@ const baseConfig = {
     resolve: {
         extensions: ['.js', '.jsx'],
         alias: {
-            '@': path.resolve(__dirname, '../src')
+            '@': path.resolve(__dirname, '../client/src')
         }
     },
     module: {
@@ -38,10 +35,14 @@ const baseConfig = {
         ]
     },
     plugins: [
-        new CopyPlugin([
-            { from: path.resolve(srcRoot, './static'), to: path.resolve(outputPath, './static'), force: true },
-        ])
+        new CopyPlugin([{
+            from: path.resolve(srcRoot, './static'),
+            to: path.resolve(outputPath, './static'),
+            force: true
+        }])
     ]
 }
 
 module.exports = baseConfig
+
+
