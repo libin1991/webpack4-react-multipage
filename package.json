@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config ./build/webpack.config.dev.js",
-    "build": "webpack --config ./build/webpack.config.build.js",
-    "server": "webpack --config ./build/webpack.server.js --watch",
-    "ssr": "node   ./dist/server/server.js"
+    "ssr-server-debug": "webpack --config ./build/webpack.server.js --watch",
+    "ssr-build": "webpack --config ./build/webpack.config.build.js",
+    "ssr-server": "webpack --config ./build/webpack.server.js",
+    "ssr-start": "node ./dist/server/server.js",
+    "ssr": "npm run ssr-build && npm run ssr-server && npm run ssr-start"
   },
   "keywords": [],
   "author": "",
