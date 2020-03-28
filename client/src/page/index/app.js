@@ -7,7 +7,7 @@ import axios from 'axios'
 import { Provider } from 'mobx-react';
 import stores from './store/index';
 import { inject, observer } from 'mobx-react';
-
+import img from './img/123.jpg'
 @inject('$store') @observer
 export default class App extends React.Component {
     static asyncDate() {
@@ -46,6 +46,7 @@ export default class App extends React.Component {
                 <a href='/abort.html'>abort</a>
                 <div>
                     <ClassA />
+                    <img src={img} alt="" />
                     <ClassB />
                 </div>
 

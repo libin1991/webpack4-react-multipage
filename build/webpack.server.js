@@ -56,27 +56,13 @@ module.exports = {
             {
                 test: /\.(png|jpeg|jpg|gif)$/,
                 use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 5 * 1024,
-                            outputPath: 'images',
-                            publicPath: '/static/images/'
-                        }
-                    }
+                    'ignore-loader'
                 ]
             },
             {
                 test: /\.(svg|bmp|eot|woff|woff2|ttf)$/,
                 use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 5 * 1024,
-                            outputPath: 'fonts',
-                            publicPath: '../static/fonts/'
-                        }
-                    }
+                    'ignore-loader'
                 ]
             }
         ]

@@ -32,9 +32,12 @@ const microCache = new LRU({
 
 const app = express();
 app.use(compression());
+
 app.use('/js', express.static(path.join(__dirname, '../dist/js')));
 app.use('/css', express.static(path.join(__dirname, '../dist/css')));
-app.get('*', async (req, res) => {
+app.use('/images', express.static(path.join(__dirname, '../dist/images')));
+
+app.get('*.html', async (req, res) => {
   let { url } = req;
   const start = Date.now();
 
@@ -65,6 +68,10 @@ app.get('*', async (req, res) => {
 
   res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });//设置response编码为utf-8
   return res.end(html);
+});
+
+app.get('/', function (req, res) {
+  res.redirect('/index.html');
 });
 
 app.listen(port, () => {

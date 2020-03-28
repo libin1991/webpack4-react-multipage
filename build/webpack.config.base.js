@@ -24,8 +24,9 @@ const baseConfig = {
             {
                 test: /\.(png|jpg|jpeg|gif|eot|ttf|svg)$/,
                 use: {
-                    loader: 'url-loader',
+                    loader: 'file-loader',
                     options: {
+                        esModule:false,
                         name: '[name].[hash].[ext]',
                         outputPath: 'images/',
                         limit: 10240
