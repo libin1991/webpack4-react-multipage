@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './index.css';
+import './index.less';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
@@ -13,7 +13,7 @@ export default class ClassB extends Component {
         const { num, minus, plus, poilist } = this.store;
 
         return (
-            <div>
+            <div className='b'>
                 <p>node.js中的fs.existsSync方法使用说明</p>
                 <div>{num}</div>
                 <button type="button" onClick={minus}>-</button>

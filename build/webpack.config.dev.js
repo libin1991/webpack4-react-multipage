@@ -53,25 +53,24 @@ const devConfig = {
                 include: srcRoot
             },
             {
-                test: /\.scss$/,
-                use: [
-                    'style-loader',
+                test: /\.less$/,
+                exclude: /node_modules/,
+                use: ['style-loader',
                     {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 2
                         }
-                    },
-                    'postcss-loader',
-                    'sass-loader',
-                    {
-                        loader: 'sass-resources-loader',
+                    }, 'less-loader', {
+                        loader: 'postcss-loader',
                         options: {
-                            resources: srcRoot + '/public/css/style.scss'
+                            ident: 'postcss',
+                            plugins: (loader) => [
+                                require('autoprefixer')()
+                            ]
                         }
                     }
-                ],
-                include: srcRoot
+                ]
             }
         ]
     },

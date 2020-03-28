@@ -42,7 +42,13 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(sa|sc|c)ss$/,
+                test: /\.css$/,
+                use: [
+                    'ignore-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
                 use: [
                     'ignore-loader'
                 ]

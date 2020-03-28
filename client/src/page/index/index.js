@@ -13,19 +13,13 @@ if (window.__INITIAL_STATE__) {
     stores.replace(window.__INITIAL_STATE__)
 }
 
-const Entry = () => {
-    return <Provider $store={stores}>
+ReactDOM.render(
+    <Provider $store={stores}>
         <App />
-    </Provider>
-};
+    </Provider>,
+    document.getElementById('root')
+)
 
-
-if (typeof window !== undefined) {
-    ReactDOM.render(
-        Entry(),
-        document.getElementById('root')
-    )
-}
 
 
 

@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const baseConfig = require('./webpack.config.base')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const chalk = require('chalk');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { pageDir, mainHtml, entry, srcRoot } = require('./config')
 
 function getHtmlArray(entryMap) {
@@ -50,7 +51,8 @@ const proConfig = {
                 include: srcRoot
             },
             {
-                test: /\.scss$/,
+                test: /\.less$/,
+                exclude: /node_modules/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
@@ -58,26 +60,26 @@ const proConfig = {
                         options: {
                             importLoaders: 2
                         }
-                    },
-                    'postcss-loader',
-                    'sass-loader',
-                    {
-                        loader: 'sass-resources-loader',
+                    }, 'less-loader', {
+                        loader: 'postcss-loader',
                         options: {
-                            resources: srcRoot + '/public/css/style.scss'
+                            ident: 'postcss',
+                            plugins: (loader) => [
+                                require('autoprefixer')()
+                            ]
                         }
                     }
-                ],
-                include: srcRoot
-            },
+                ]
+            }
         ]
     },
     plugins: [
         ...htmlArray,
-        new MiniCssExtractPlugin({
+        new MiniCssExtractPlugin({  //提取css
             filename: 'css/[name].[contenthash].css',
             chunkFilename: 'css/[name].[contenthash].chunk.css'
         }),
+        new OptimizeCssAssetsPlugin(),  //压缩css
         new webpack.DefinePlugin({
             'process.env': {
                 mode: JSON.stringify('production')

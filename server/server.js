@@ -6,7 +6,6 @@ import LRU from 'lru-cache';
 const fs = require('fs-extra');
 const chalk = require('chalk');
 import { Provider, useStaticRendering } from 'mobx-react';
-
 import express from 'express';
 import compression from 'compression';
 
@@ -22,19 +21,13 @@ function readFileContent(pathStr) {
   }
 }
 
-function log(str) {
-  console.log(chalk.red.bold('-----------------'));
-  console.log(str)
-  console.log(chalk.red.bold('-----------------'));
-}
-
 useStaticRendering(true); // Mobx 的官方方法，防止多次渲染，避免内存泄漏
 /**
  * 设置缓存工作方法的相关属性
  */
 const microCache = new LRU({
   max: 100, // 缓存数量
-  maxAge: 5000 // 缓存时间（毫秒）
+  maxAge: 2000 // 缓存时间（毫秒）
 });
 
 const app = express();
@@ -46,11 +39,9 @@ app.get('*', async (req, res) => {
   const start = Date.now();
 
   if (url == '/') url = '/index.html';
-
-
   const hit = microCache.get(url);
   if (hit) { // 判断是否存在缓存，有则返回缓存，无则默认实时编译返回
-    console.log(`--> ${req.url}  ${Date.now() - start}ms, cache`);
+    console.log(chalk.red.bold(`--> ${req.url}  ${Date.now() - start}ms, 使用的是缓存`));
     return res.end(hit);
   }
 
@@ -68,21 +59,19 @@ app.get('*', async (req, res) => {
   html = minify(html, {
     collapseWhitespace: true
   })
-
+  console.log(chalk.blue.bold(`--> ${req.url}  ${Date.now() - start}ms, 使用的是非缓存`));
 
   microCache.set(url, html);
 
   res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });//设置response编码为utf-8
   return res.end(html);
-
 });
 
 app.listen(port, () => {
   console.log(`施主，莫急，${port}号技师为您服务！！！`)
-
-  chalk.red.bold(`
-      \n==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.\n`
-  )
+  console.log(chalk.red.bold(`
+      ==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.\n`
+  ));
 })
 
 
