@@ -1,8 +1,8 @@
 import './index.css';
 import React from 'react'
 import ReactDOM from 'react-dom'
-import classA from './components/classA'
-import classB from './components/classB'
+import ClassA from './components/classA'
+import ClassB from './components/classB'
 import axios from 'axios'
 import { Provider } from 'mobx-react';
 import stores from './store/index';
@@ -27,32 +27,30 @@ export default class App extends React.Component {
     }
     componentDidMount() {
         if (!this.state.list.length) {
-            console.log('axios')
+
             App.asyncDate().then(({ data }) => {
-                console.log(data)
-                console.log(this.props.$store)
+
                 this.props.$store.replace(data)
             });
         }
     }
     con(data) {
-        console.log(data);
+        console.log(data.name);
     }
     render() {
-        const { list } = this.state;
+        const { poilist: list } = this.props.$store;
         return (
-
             <div>
                 <h1>你好，我是index首页</h1>
                 <a href='/home.html'>home</a><br />
-                <a href='/about.html'>about</a>
+                <a href='/abort.html'>abort</a>
                 <div>
-                    <classA />
-                    <classB />
+                    <ClassA />
+                    <ClassB />
                 </div>
 
                 {list.map((data) => {
-                    return <h4 key={data.id} onClick={this.con.bind(this, data)}>{data.name}</h4>
+                    return <h4 key={data.id} onClick={this.con.bind(this, data)}>{data.name}133</h4>
                 })}
             </div >
         );

@@ -4,13 +4,12 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
 @inject('$store') @observer
-export default class classB extends Component {
+export default class ClassB extends Component {
     constructor(props) {
         super(props);
         this.store = props.$store;
     }
     render() {
-        console.log(this.store)
         const { num, minus, plus, poilist } = this.store;
 
         return (

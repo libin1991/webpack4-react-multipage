@@ -3,7 +3,7 @@ import './index.css'
 import { inject, observer } from 'mobx-react';
 
 @inject('$store') @observer
-export default class classA extends Component {
+export default class ClassA extends Component {
     constructor(props) {
         super(props);
         this.state = {

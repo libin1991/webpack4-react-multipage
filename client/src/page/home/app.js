@@ -1,8 +1,8 @@
 import './index.css';
 import React from 'react'
 import ReactDOM from 'react-dom'
-import classA from './components/classA'
-import classB from './components/classB'
+import ClassA from './components/classA'
+import ClassB from './components/classB'
 import axios from 'axios'
 import { Provider } from 'mobx-react';
 import stores from './store/index';
@@ -45,10 +45,10 @@ export default class App extends React.Component {
             <div>
                 <h1>你好，我是index首页</h1>
                 <a href='/home.html'>home</a><br />
-                <a href='/about.html'>about</a>
+                <a href='/abort.html'>abort</a>
                 <div>
-                    <classA />
-                    <classB />
+                    <ClassA />
+                    <ClassB />
                 </div>
 
                 {list.map((data) => {

@@ -6,7 +6,6 @@ import LRU from 'lru-cache';
 const fs = require('fs-extra');
 const chalk = require('chalk');
 import { Provider, useStaticRendering } from 'mobx-react';
-import { getLoadableState } from 'loadable-components/server';
 
 import express from 'express';
 import compression from 'compression';
@@ -14,8 +13,6 @@ import compression from 'compression';
 const port = process.env.PORT || 8888;
 
 import SSR_entry from '../client/src/page/ssr.entry'
-
-
 
 function readFileContent(pathStr) {
   pathStr = path.resolve(process.cwd(), pathStr)
@@ -32,6 +29,13 @@ function log(str) {
 }
 
 useStaticRendering(true); // Mobx 的官方方法，防止多次渲染，避免内存泄漏
+/**
+ * 设置缓存工作方法的相关属性
+ */
+const microCache = new LRU({
+  max: 100, // 缓存数量
+  maxAge: 5000 // 缓存时间（毫秒）
+});
 
 const app = express();
 app.use(compression());
@@ -39,26 +43,37 @@ app.use('/js', express.static(path.join(__dirname, '../dist/js')));
 app.use('/css', express.static(path.join(__dirname, '../dist/css')));
 app.get('*', async (req, res) => {
   let { url } = req;
+  const start = Date.now();
+
   if (url == '/') url = '/index.html';
-  const { App, AppStore } = SSR_entry[url];
+
+
+  const hit = microCache.get(url);
+  if (hit) { // 判断是否存在缓存，有则返回缓存，无则默认实时编译返回
+    console.log(`--> ${req.url}  ${Date.now() - start}ms, cache`);
+    return res.end(hit);
+  }
+
+  const { App, Store } = SSR_entry[url];
   const { data } = await App.asyncDate();
-  AppStore.replace(data);
-  const content = renderToString(<Provider $store={AppStore}>
+  Store.replace(Object.assign(Store, data));
+
+  const content = renderToString(<Provider $store={Store}>
     <App />
   </Provider>);
 
-
-
-  console.log(typeof global !== 'object');
-
-
-
   const tpl = readFileContent(`./dist/${url}`);
-  const html = tpl.replace('<div id="root"></div>', `<div id="root">${content}</div><script>window.__INITIAL_STATE__ = ${JSON.stringify(data)}</script>`);
-  res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });//设置response编码为utf-8
-  return res.end(minify(html, {
+  let html = tpl.replace('<div id="root"></div>', `<div id="root">${content}</div><script>window.__INITIAL_STATE__ = ${JSON.stringify(data)}</script>`);
+
+  html = minify(html, {
     collapseWhitespace: true
-  }));
+  })
+
+
+  microCache.set(url, html);
+
+  res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });//设置response编码为utf-8
+  return res.end(html);
 
 });
 
