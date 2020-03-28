@@ -4,22 +4,28 @@ import { hot } from 'react-hot-loader'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { loadComponents } from 'loadable-components';
+import { configure } from 'mobx';
+import { Provider } from 'mobx-react';
+import App from './app';
+import stores from './store/index';
 
-import App from './app'
+
+const Entry = (stores) => {
+    return <Provider $store={stores}>
+        <App />
+    </Provider>
+};
+
 
 if (typeof window !== undefined) {
     ReactDOM.render(
-        <App />,
+        Entry(stores),
         document.getElementById('root')
     )
-} else {
-    loadComponents().then(() => {
-        render(
-            <App data={[]} />,
-            document.getElementById('app')
-        );
-    });
 }
+
+
+export default Entry
 
 
 

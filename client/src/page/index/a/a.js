@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './a.css'
+import { inject, observer } from 'mobx-react';
 
+@inject('$store') @observer
 class A extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +21,7 @@ class A extends Component {
 
         return (
             <div className='A'>
-                <div>{this.state.num}</div>
+                <div>{this.state.num} || {this.props.$store.num}</div>
                 <button type="button" onClick={this.click.bind(this, -1)}>-</button>
                 <button type="button" onClick={this.click.bind(this, 1)}> +</button>
             </div>

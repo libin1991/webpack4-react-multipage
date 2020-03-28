@@ -23,6 +23,24 @@
                 "regenerator": true,
                 "useESModules": false
             }
+        ],
+        [
+            "@babel/plugin-syntax-decorators",
+            {
+                "legacy": true
+            }
+        ],
+        [
+            "@babel/plugin-proposal-decorators",
+            {
+                "legacy": true
+            }
+        ],
+        [
+            "@babel/plugin-proposal-class-properties",
+            {
+                "loose": true
+            }
         ]
     ]
 }
