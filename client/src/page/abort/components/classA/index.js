@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import './a.css'
+import './index.css'
 import { inject, observer } from 'mobx-react';
 
 @inject('$store') @observer
-class A extends Component {
+export default class classA extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,9 +18,8 @@ class A extends Component {
     }
 
     render() {
-
         return (
-            <div className='A'>
+            <div className='classA'>
                 <div>{this.state.num} || {this.props.$store.num}</div>
                 <button type="button" onClick={this.click.bind(this, -1)}>-</button>
                 <button type="button" onClick={this.click.bind(this, 1)}> +</button>
@@ -29,4 +28,3 @@ class A extends Component {
     }
 }
 
-export default A;

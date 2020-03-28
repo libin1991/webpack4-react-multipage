@@ -1,8 +1,8 @@
-.A {
+.classA {
     border: 1px solid red;
     margin: 40px 0px;
 }
 
-.A div {
+.classA div {
     color: blue
 }

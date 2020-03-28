@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './b.css';
+import './index.css';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
 @inject('$store') @observer
-class B extends Component {
+export default class classB extends Component {
     constructor(props) {
         super(props);
         this.store = props.$store;
@@ -15,7 +15,7 @@ class B extends Component {
 
         return (
             <div>
-                <p>node.js中的fs.existsSync方法使用说明  </p>
+                <p>node.js中的fs.existsSync方法使用说明</p>
                 <div>{num}</div>
                 <button type="button" onClick={minus}>-</button>
                 <button type="button" onClick={plus}>+</button>
@@ -30,4 +30,4 @@ class B extends Component {
 
 
 
-export default B;
+

@@ -5,6 +5,8 @@ var minify = require('html-minifier').minify;
 import LRU from 'lru-cache';
 const fs = require('fs-extra');
 const chalk = require('chalk');
+import { Provider, useStaticRendering } from 'mobx-react';
+import { getLoadableState } from 'loadable-components/server';
 
 import express from 'express';
 import compression from 'compression';
@@ -29,6 +31,8 @@ function log(str) {
   console.log(chalk.red.bold('-----------------'));
 }
 
+useStaticRendering(true); // Mobx 的官方方法，防止多次渲染，避免内存泄漏
+
 const app = express();
 app.use(compression());
 app.use('/js', express.static(path.join(__dirname, '../dist/js')));
@@ -36,13 +40,18 @@ app.use('/css', express.static(path.join(__dirname, '../dist/css')));
 app.get('*', async (req, res) => {
   let { url } = req;
   if (url == '/') url = '/index.html';
-  const App = SSR_entry[url];
+  const { App, AppStore } = SSR_entry[url];
   const { data } = await App.asyncDate();
+  AppStore.replace(data);
+  const content = renderToString(<Provider $store={AppStore}>
+    <App />
+  </Provider>);
 
 
-  console.log(data.poilist);
 
-  const content = renderToString(<App data={data.poilist} />);
+  console.log(typeof global !== 'object');
+
+
 
   const tpl = readFileContent(`./dist/${url}`);
   const html = tpl.replace('<div id="root"></div>', `<div id="root">${content}</div><script>window.__INITIAL_STATE__ = ${JSON.stringify(data)}</script>`);
@@ -50,6 +59,7 @@ app.get('*', async (req, res) => {
   return res.end(minify(html, {
     collapseWhitespace: true
   }));
+
 });
 
 app.listen(port, () => {

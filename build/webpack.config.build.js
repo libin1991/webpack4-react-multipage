@@ -9,7 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const baseConfig = require('./webpack.config.base')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const chalk = require('chalk');
-const { pageDir, mainHtml, entry, srcRoot, proObj } = require('./config')
+const { pageDir, mainHtml, entry, srcRoot } = require('./config')
 
 function getHtmlArray(entryMap) {
     let htmls = []
@@ -80,8 +80,7 @@ const proConfig = {
         }),
         new webpack.DefinePlugin({
             'process.env': {
-                mode: JSON.stringify('production'),
-                ...proObj
+                mode: JSON.stringify('production')
             }
         }),
         new ProgressBarPlugin({

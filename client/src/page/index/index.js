@@ -9,8 +9,11 @@ import { Provider } from 'mobx-react';
 import App from './app';
 import stores from './store/index';
 
+if (window.__INITIAL_STATE__) {
+    stores.replace(window.__INITIAL_STATE__)
+}
 
-const Entry = (stores) => {
+const Entry = () => {
     return <Provider $store={stores}>
         <App />
     </Provider>
@@ -19,14 +22,10 @@ const Entry = (stores) => {
 
 if (typeof window !== undefined) {
     ReactDOM.render(
-        Entry(stores),
+        Entry(),
         document.getElementById('root')
     )
 }
-
-
-export default Entry
-
 
 
 

@@ -3,7 +3,6 @@ import { observable, action } from 'mobx';
 class A {
     @observable num = 0;
     @observable poilist = [];
-
     @action replace({ num, poilist }) {
         this.num = num;
         this.poilist = poilist

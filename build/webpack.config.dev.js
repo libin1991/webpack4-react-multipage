@@ -78,8 +78,7 @@ const devConfig = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                mode: JSON.stringify('development'),
-                ...devObj
+                mode: JSON.stringify('development')
             }
         }),
         new webpack.NamedModulesPlugin(),
