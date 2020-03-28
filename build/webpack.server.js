@@ -55,15 +55,27 @@ module.exports = {
             },
             {
                 test: /\.(png|jpeg|jpg|gif)$/,
-                use: [
-                    'ignore-loader'
-                ]
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        esModule: false,
+                        name: '[name].[hash].[ext]',
+                        outputPath: 'images/',
+                        limit: 10240
+                    }
+                }
             },
             {
                 test: /\.(svg|bmp|eot|woff|woff2|ttf)$/,
-                use: [
-                    'ignore-loader'
-                ]
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        esModule: false,
+                        name: '[name].[hash].[ext]',
+                        outputPath: 'images/',
+                        limit: 10240
+                    }
+                }
             }
         ]
     },
